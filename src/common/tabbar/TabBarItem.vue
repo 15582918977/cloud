@@ -1,8 +1,6 @@
 <template>
-	<div class="tab-bar-item" @click="itemLink" :class="{acolor:isActive}">
-		<div v-if="!isActive"><slot name="item-icon"></slot></div>
-		<div v-else><slot name="item-icon-active"></slot></div>
-		<div :style="activeColor"><slot name="item-text"></slot></div>
+	<div class="tab-bar-item" @click="itemLink" :style="activeColor">
+		<div><slot name="item-text"></slot></div>
 	</div>
 </template>
 
@@ -11,27 +9,29 @@
 		name: 'TabBarItem',
 		props: {
 			path: String,
-			activeStyle: {
-				type: String,
-				default: 'black'
-			}
+			
 		},
 		data(){
-			return {}
+			return {
+				
+				activeStyle:'#b2b8b98e'
+			}
 		},
+		
 		computed: {
 			isActive(){
+				
 				return this.$route.path.indexOf(this.path) !== -1;
 			},
 			activeColor(){
-				return this.isActive ? {color: this.activeStyle} : {}
+				return this.isActive ? {background: this.activeStyle} : {}
 			}
 		},
 		methods: {
 			itemLink() {
 				
 				this.$router.push(this.path)
-				this.activeStyle = 'pink'
+				
 			}
 		}
 	}
@@ -40,14 +40,17 @@
 <style  scoped>
 	.tab-bar-item {
 		width: 100%;
-		height: 5%;
-		padding-top: 10%;
+		height: 35px;
+		padding-top: 10px;
 		text-align: center;
 		font-weight: bold;
 		color: aliceblue;
+		cursor: pointer;
 	}
-	.acolor{
-		background: rgba(135, 207, 235, 0.712)
+	.tab-bar-item:hover{
+		background-color: #b2b8b98e
 	}
+	
+	
 	
 </style>

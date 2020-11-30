@@ -47,6 +47,7 @@ export default {
     transform: translate(-50%,-50%);
     background: white;
     overflow: hidden;
+    border: 1px solid black;
 }
 
 .pop-header{

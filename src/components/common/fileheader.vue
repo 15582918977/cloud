@@ -9,7 +9,7 @@
     <div class="file-header-right">
       <div class="file-username">
 <!--        <div class="portrait"></div>-->
-        <el-avatar :size="30" :src="circleUrl"></el-avatar>
+<el-avatar ></el-avatar>
         <span class="username">{{user}}</span>
       </div>
     </div>
@@ -38,17 +38,19 @@ name: "fileheader",
 
 <style scoped>
 .file-header{
-  height: 3.125rem;
+  height: 100%;
   width: 100%;
-  box-shadow: 0 5px 5px 2px #ccc;
+  padding:0 0 0 1.25rem ;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  padding:0 1.25rem;
+  border-bottom: 3px solid black;
+  
 }
-.file-header-right{
-
+.el-avatar{
+  background: url(../../assets/imgs/person.jpg);
+  background-size: 100%,100%;
 }
 .file-username{
   display: flex;

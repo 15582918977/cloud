@@ -6,13 +6,14 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     
-      user:''
+      user:'',
     
   },
   mutations: {
     adduser(state,val){
       state.user = val;
-    }
+    },
+    
   },
   actions: {
   },

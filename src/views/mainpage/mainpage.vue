@@ -2,13 +2,13 @@
   <div>
     <homepages>
       <template #list-content >
+        <div class="all-options">
         <div class="content-options">
           <el-upload
             enctype="multipart/form-data"
             class="upload-demo"
-            action="http://localhost:8083/addFile"
+            action="http://152.136.111.227:8083/addFile"
             :data="getfileData()"
-            :before-upload="getfileData"
             :on-success="showFile"
             :disabled="isDisable"
             multiple
@@ -26,24 +26,25 @@
           <el-input v-model.lazy="filesinput" class="files-input" placeholder="请输入内容"></el-input>
           
         </div>
+        </div>
 
         <div class="main-content">
 
         <el-breadcrumb separator-class="el-icon-arrow-right" class="directory">
-          <el-breadcrumb-item :to="{ path: '/main' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item @click="backPath" :disabled="isDisable">>返回上一级</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/picture' }">全部文件</el-breadcrumb-item>
+          
         </el-breadcrumb>
 
         <el-alert
+          class="alert"
           v-show="alertShow"
-          title="错误提示的文案"
+          title="文件（夹）命名不能空，请重新输入文件名称"
           type="error">
         </el-alert>
 
         <div class="content-list">
           <div class="content-list-file">
             <div class="file-check"></div>
-            <div class="file-icon"></div>
             <div class="file-name">filename</div>
             <div class="file-size">filesize</div>
             <div class="file-date">filedate</div>
@@ -53,14 +54,14 @@
  
           <div class="content-list-file" v-for="item of pageFload" :key="item.floadId">
             <div class="file-check"></div>
-            <div class="file-icon"></div>
+            <div class="fload-icon"></div>
             <div class="file-name" @dblclick.self="floadClick(item)" @mouseup="isClick(item)" :disabled="isDisable">
               {{ item.floadName }}
               <div class="file-name-input" v-if="item.show">
                 <el-input
                   class="create-fload"
                   v-model.lazy="floadInput"
-                  placeholder="请输入内容"
+                  
                   :key="item.floadId"
                 ></el-input>
                 <i class="el-icon-check" @click="floadNameCor(item)"></i>
@@ -94,8 +95,8 @@
             
             @dblclick="lookFile(item)"
           >
-            <div class="file-check">[]</div>
-            <div class="file-icon">@@</div>
+            <div class="file-check"></div>
+            <div class="file-icon"></div>
             <div class="file-name">
               <span style="width:70%">{{ item.fileName }}</span>
 
@@ -106,6 +107,7 @@
                   placeholder="请输入内容"
                   :key="item.fileId"
                 ></el-input>
+                
                 <i class="el-icon-check" @click="fileNameCor(item)"></i>
                 <i class="el-icon-close" @click="fileNameErr(item)"></i>
               </div>
@@ -216,6 +218,7 @@ export default {
     },
    
     filesearch(){
+      if(this.filesinput==='') return;
       this.$router.push({path:`/search/${this.filesinput}`})
       
     // this.$router.push({path:'/search',query: {filesName:this.filesinput}})
@@ -397,6 +400,17 @@ backPath(){
 </script>
 
 <style lang="scss"  scoped>
+.all-options{
+  margin: 10px 10px 0 10px;
+}
+.alert{
+  position: fixed;
+  width:30%;
+  top:10%;
+  left:50%;
+  transform: translateX(-50%);
+  margin: 20px 0 0 0;
+}
 .mask{
   position: fixed;
   top:0;
@@ -404,7 +418,6 @@ backPath(){
   width: 100%;
   height: 100%;
   background: rgba(94, 89, 90, 0.295);
-  z-index: -1;
 }
 
 
@@ -418,6 +431,7 @@ backPath(){
   float: right;
 }
 .files-input{
+  
   float: right;
   width: 20%;
 }
@@ -427,16 +441,25 @@ backPath(){
 }
 .el-icon-check,
 .el-icon-close {
+  border-radius: 20%;
+  border: 1px solid rgba(235, 171, 53, 0.719);
   display: inline-block;
+  box-shadow: 0px 0px 1px 0px rgb(235, 171, 53);
+  font-weight: bold;
   width: 20px;
   height: 20px;
-  border: 1px solid;
   text-align: center;
   line-height: 20px;
   margin-left: 5px;
+  color: orange;
 }
+
 .create-fload {
-  width: 35%;
+  outline: 0;
+    border: 1px solid rgb(235, 171, 53);
+    box-shadow: 0px 0px 6px 0px rgb(235, 171, 53);
+    min-width: 25%;
+    max-width: 35%;
 }
 ::v-deep .el-input__inner {
   height: 30px !important;
@@ -449,8 +472,12 @@ backPath(){
   padding: 15px 0px;
   box-sizing: border-box;
 }
+.content-list-file{
+  border-bottom: 1px solid rgba(140, 146, 148, 0.2);
+}
 .content-list-file:nth-of-type(n+2):hover{
-  background-color: rgb(180, 234, 255);
+  background-color: rgba(180, 234, 255, 0.301);
+  border-bottom: 1px solid rgba(125, 148, 156, 0.541);
 }
 .el-dropdown{
   float: right;
@@ -464,16 +491,26 @@ backPath(){
   height: 55px;
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: 12px;
   background-color: rgba($color: white, $alpha: 0.8);
 }
 .file-check {
   height: 100%;
   width: 5%;
-  
+  display: none;
 }
-.file-icon {
-  width: 10%;
+
+.fload-icon{
+  width: 40px;
+  height:71%;
+  background: url('../../assets/imgs/fload.jpg');
+  background-size: 100% 100%;
+}
+.file-icon{
+   width: 40px;
+  height:71%;
+  background: url('../../assets/imgs/txt.jpg');
+  background-size: 100% 100%;
 }
 .file-name {
   flex: 1;

@@ -12,7 +12,7 @@
         <el-aside width="200px" >
            <main-tab-bar></main-tab-bar> 
         </el-aside>
-        <el-main>
+        <el-main >
 
             <slot name="list-content" class="content"></slot>
 
@@ -85,15 +85,19 @@ watch: {
 
 
 <style scoped>
+
 #app{
-  background:url('../../assets/imgs/warm.jpg') no-repeat;
+  background:url('../../assets/imgs/bg.jpg') no-repeat;
   background-size:100% 100%;  
+  font-family: "Microsoft YaHei";
+  color: white;
+  padding: 0 30px 0 0;
+  box-sizing: border-box;
 }
 .fileheader{
   z-index:10;
 }
  .el-header, .el-footer {
-    
     text-align: center;
     line-height: 60px;
     padding:0 !important;
@@ -103,15 +107,15 @@ watch: {
     margin-bottom: 40px;
   }
  ::v-deep .tab-bar-wrap{
-   background-color: rgba(255, 255, 255, 0.3);;
+   
  }
 
 .el-main {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: white;
   color: #333;
   padding:0 !important;
 }
-.content{
+/* .content{
   padding: 10px;
-}
+} */
 </style>

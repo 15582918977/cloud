@@ -3,7 +3,7 @@
     <homepages>
       <template #list-content>
         <div class="content-options">
-          
+          <div class="all-options">
 
           
 <el-button size="small" type="primary" @click="filesearch" class="search"
@@ -15,18 +15,19 @@
             placeholder="请输入内容"
           ></el-input>
           
-        </div>
-
+        </div></div>
+<div class="main-content">
         <el-breadcrumb separator-class="el-icon-arrow-right" class="directory">
           <el-breadcrumb-item :to="{ path: '/picture' }">全部图片</el-breadcrumb-item>
         </el-breadcrumb>
 
-        
+        </div>
 
 
-        <div class="files-img" v-for="(item,index) of img" :key="index">
-          <div class="mask"></div>
-          <div class="delete" @click="pictureDelete(item.name)"><i class="el-icon-delete"></i></div>
+        <div class="files-img" v-for="(item,index) of img" :key="index" @mouseover="mouseOver(index)" @mouseleave="mouseLeave">
+          
+          <div class="delete" @click="pictureDelete(item.name)" v-show="num===index?show:false" ><i class="el-icon-delete"></i></div>
+          <div class="mask" v-show="num===index?show:false"></div>
           <img :src="item.a" alt="" class="files-img-item">
             
         </div>
@@ -59,15 +60,16 @@ export default {
       imgs:[],
       imgArr:[],
       img:[],
+      show:false,
+      num:-1,
     };
   },
   computed:{
     content(){
       return this.$route.query.filesName;
     },
-    lala(item){
-      return window.URL.revokeObjectURL(item.data)
-    }
+    
+    
     
   },
   mounted() {
@@ -113,9 +115,10 @@ export default {
     // });
     
   },
-  methods: {
+  methods: {mouseOver(index){this.show = true;this.num=index},
+    mouseLeave(){this.show= false},
     changeImg(){
-      
+      this.img = []
       this.imgArr.forEach((v)=>{
        let arr = {};
       arr.a = 'data:image/png;base64,';
@@ -128,14 +131,24 @@ export default {
           }
           arr.a +=  window.btoa(binary);
           arr.name = v.name;
+
+          if(this.img.length===0){
+            this.img.push(arr);
+          }else{
+            this.img.forEach((v,i)=>{
+              if(v.name!==arr.name){
+                if(i===this.img.length-1)
+                this.img.push(arr)
+              }
+            })
+          }
+          // this.img.push(arr).filter(function(item, index, arr) {
+          //   console.log(item,arr)
+          // //当前元素，在原始数组中的第一个索引==当前索引值，否则返回当前元素
+          // // return arr.indexOf(item, 0) === index;
+          // });
           
-          this.img.forEach((v)=>{
-            if(v.name!==arr.name){
-              this.img.push(arr);
-            }
-          })
           
-          console.log(this.img)
           
         // this.img=  'data:image/png;base64,' + btoa(new Uint8Array(v.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
         
@@ -156,54 +169,62 @@ export default {
       })
     },
     filesearch(){
+      if(this.filesinput==='') return;
       this.$router.push({path:`/search/${this.filesinput}`})
     // this.$router.push({path:'/search',query: {filesName:this.filesinput}})
       
     },
   
-
-    
-
-   
   },
 };
 </script>
 
 <style scoped>
-
 .files-img{
+  position: relative;
+  margin: 10px;
   display: inline-block;
-  margin: 10px 20px;
-    width: 10rem;
-    height: 10rem;
-    overflow: hidden;
-    position: relative;
+  width:200px;
+  height: 200px;
 }
-.files-img:hover .mask{
-    position: absolute;
-    width: 10rem;
-    height: 10rem;
-    background: rgba(58, 56, 56, 0.3);
+.files-img-item{
+  background-position: center center;
+  width: 100%;
+  height:100%;
 }
 .delete{
   position: absolute;
-  opacity: 0;
-}.files-img:hover .delete{
-  opacity: 1;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+  z-index: 9;
 }
-.files-img:hover .el-icon-delete{
+.delete i::before{
+  content:"\e6d7";
+  font-size: 18px;
+  color:white;
+}
+.all-options{
+  margin: 10px 10px 0 10px;
+}
+.el-button {
+    margin-left: 10px;
+}
+.alert{
+  position: fixed;
+  width:30%;
+  top:10%;
+  left:50%;
+  transform: translateX(-50%);
+  margin: 20px 0 0 0;
+}
+.mask{
   position: absolute;
-  top: 2px;
-  left: 3px;
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  color: aliceblue;
-}
-.files-img-item{
-    width: 10rem;
-	height: 10rem;
-    object-fit: cover;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  background: rgba(94, 89, 90, 0.295);
 }
 
 
@@ -217,6 +238,7 @@ export default {
   float: right;
 }
 .files-input{
+  
   float: right;
   width: 20%;
 }
@@ -226,16 +248,25 @@ export default {
 }
 .el-icon-check,
 .el-icon-close {
+  border-radius: 20%;
+  border: 1px solid rgba(235, 171, 53, 0.719);
   display: inline-block;
+  box-shadow: 0px 0px 1px 0px rgb(235, 171, 53);
+  font-weight: bold;
   width: 20px;
   height: 20px;
-  border: 1px solid;
   text-align: center;
   line-height: 20px;
   margin-left: 5px;
+  color: orange;
 }
+
 .create-fload {
-  width: 35%;
+  outline: 0;
+    border: 1px solid rgb(235, 171, 53);
+    box-shadow: 0px 0px 6px 0px rgb(235, 171, 53);
+    min-width: 25%;
+    max-width: 35%;
 }
 ::v-deep .el-input__inner {
   height: 30px !important;
@@ -248,8 +279,12 @@ export default {
   padding: 15px 0px;
   box-sizing: border-box;
 }
+.content-list-file{
+  border-bottom: 1px solid rgba(140, 146, 148, 0.2);
+}
 .content-list-file:nth-of-type(n+2):hover{
-  background-color: rgb(180, 234, 255);
+  background-color: rgba(180, 234, 255, 0.301);
+  border-bottom: 1px solid rgba(125, 148, 156, 0.541);
 }
 .el-dropdown{
   float: right;
@@ -263,16 +298,21 @@ export default {
   height: 55px;
   display: flex;
   align-items: center;
-  font-size: 14px;
-  background-color: rgba( 255,255,255,  0.8);
+  font-size: 12px;
+  background-color: rgba(255,255,255, 0.8);
 }
 .file-check {
   height: 100%;
   width: 5%;
-  
+  display: none;
 }
-.file-icon {
-  width: 10%;
+
+.file-icon{
+  width: 53px;
+  height:71%;
+  background: url('../../assets/imgs/fload.jpg');
+  background-size: 100% 100%;
+  
 }
 .file-name {
   flex: 1;
@@ -289,7 +329,7 @@ export default {
 }
 .content-options {
   height: 30px;
-  border: 1px solid black;
+  
 }
 .upload-demo {
   display: inline-block;

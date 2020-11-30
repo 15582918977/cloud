@@ -3,6 +3,7 @@
     <homepages>
       <template #list-content>
         <div class="content-options">
+          <div class="all-options">
           <el-upload
             enctype="multipart/form-data"
             class="upload-demo"
@@ -27,6 +28,7 @@
           ></el-input>
           
         </div>
+        </div>
 <div class="main-content">
       <el-breadcrumb separator-class="el-icon-arrow-right" class="directory">
                 <el-breadcrumb-item :to="{ path: '/text' }">全部文档</el-breadcrumb-item>
@@ -35,7 +37,6 @@
         <div class="content-list">
           <div class="content-list-file">
             <div class="file-check"></div>
-            <div class="file-icon"></div>
             <div class="file-name">filename</div>
             <div class="file-size">filesize</div>
             <div class="file-date">filedate</div>
@@ -167,6 +168,7 @@ export default {
           });
     },
   filesearch(){
+    if(this.filesinput==='') return;
     this.$router.push({path:`/search/${this.filesinput}`})
     // this.$router.push({path:'/search',query: {filesName:this.filesinput}})
   },
@@ -244,6 +246,17 @@ export default {
 </script>
 
 <style scoped>
+.all-options{
+  margin: 10px 10px 0 10px;
+}
+.alert{
+  position: fixed;
+  width:30%;
+  top:10%;
+  left:50%;
+  transform: translateX(-50%);
+  margin: 20px 0 0 0;
+}
 .mask{
   position: fixed;
   top:0;
@@ -251,7 +264,10 @@ export default {
   width: 100%;
   height: 100%;
   background: rgba(94, 89, 90, 0.295);
-  z-index: -1;
+  
+}
+.el-button+.el-button{
+    margin-left: 10px;
 }
 
 .main-content{
@@ -264,6 +280,7 @@ export default {
   float: right;
 }
 .files-input{
+  
   float: right;
   width: 20%;
 }
@@ -273,16 +290,25 @@ export default {
 }
 .el-icon-check,
 .el-icon-close {
+  border-radius: 20%;
+  border: 1px solid rgba(235, 171, 53, 0.719);
   display: inline-block;
+  box-shadow: 0px 0px 1px 0px rgb(235, 171, 53);
+  font-weight: bold;
   width: 20px;
   height: 20px;
-  border: 1px solid;
   text-align: center;
   line-height: 20px;
   margin-left: 5px;
+  color: orange;
 }
+
 .create-fload {
-  width: 35%;
+  outline: 0;
+    border: 1px solid rgb(235, 171, 53);
+    box-shadow: 0px 0px 6px 0px rgb(235, 171, 53);
+    min-width: 25%;
+    max-width: 35%;
 }
 ::v-deep .el-input__inner {
   height: 30px !important;
@@ -295,8 +321,12 @@ export default {
   padding: 15px 0px;
   box-sizing: border-box;
 }
+.content-list-file{
+  border-bottom: 1px solid rgba(140, 146, 148, 0.2);
+}
 .content-list-file:nth-of-type(n+2):hover{
-  background-color: rgb(180, 234, 255);
+  background-color: rgba(180, 234, 255, 0.301);
+  border-bottom: 1px solid rgba(125, 148, 156, 0.541);
 }
 .el-dropdown{
   float: right;
@@ -310,16 +340,21 @@ export default {
   height: 55px;
   display: flex;
   align-items: center;
-  font-size: 14px;
-  background-color: rgba( 255,255,255,  0.8);
+  font-size: 12px;
+  background-color: rgba(255,255,255, 0.8);
 }
 .file-check {
   height: 100%;
   width: 5%;
-  
+  display: none;
 }
-.file-icon {
-  width: 10%;
+
+.file-icon{
+  width: 53px;
+  height:71%;
+  background: url('../../assets/imgs/fload.jpg');
+  background-size: 100% 100%;
+  
 }
 .file-name {
   flex: 1;
@@ -336,7 +371,7 @@ export default {
 }
 .content-options {
   height: 30px;
-  border: 1px solid black;
+  
 }
 .upload-demo {
   display: inline-block;
